@@ -469,7 +469,7 @@ def Tacx2Dongle(self):
 
 def Tacx2DongleSub(self, Restart):
     global clv, AntDongle, TacxTrainer
-Support
+
     if clv.manual:
          return True
 
