@@ -241,8 +241,8 @@ def LocateHW(self):
     if AntDongle and AntDongle.OK:
         pass
     else:
-        AntDongle = ant.clsAntDongle()
-        if not AntDongle.OK:
+        AntDongle = ant.clsAntDongle(None,clv.simulate)
+        if AntDongle.OK:
              if clv.manual:      AntDongle.Message += ' (manual power)'
              if clv.manualGrade: AntDongle.Message += ' (manual grade)'
         self.SetMessages(Dongle=AntDongle.Message)
@@ -269,10 +269,7 @@ def LocateHW(self):
     # Done
     #---------------------------------------------------------------------------
     if debug.on(debug.Application): logfile.Write ("Scan for hardware - end")
-    if TacxTrainer.OK:
-        if AntDongle.OK or clv.manual or clv.manualGrade:
-            return True
-    return False 
+    return (TacxTrainer.OK and AntDongle.OK) 
     
 # ------------------------------------------------------------------------------
 # R u n o f f
@@ -469,9 +466,6 @@ def Tacx2Dongle(self):
 
 def Tacx2DongleSub(self, Restart):
     global clv, AntDongle, TacxTrainer
-
-    if clv.manual:
-         return True
 
     assert(AntDongle and AntDongle.OK)
     assert(TacxTrainer and TacxTrainer.OK)

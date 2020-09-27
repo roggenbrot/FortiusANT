@@ -261,15 +261,19 @@ class clsAntDongle():
     Message             = ''
     Cycplus             = False
     DongleReconnected   = True
+    simulate            = False
     
     #-----------------------------------------------------------------------
     # _ _ i n i t _ _
     #-----------------------------------------------------------------------
     # Function  Create the class and try to find a dongle
     #-----------------------------------------------------------------------
-    def __init__(self, DeviceID = None):
+    def __init__(self, DeviceID = None, simulate = False):
         self.DeviceID = DeviceID
+        self.simulate = simulate
         self.OK       = self.__GetDongle()
+        if self.simulate:
+            self.OK   = True
 
     #-----------------------------------------------------------------------
     # G e t D o n g l e
@@ -284,6 +288,8 @@ class clsAntDongle():
     # returns   True/False
     #-----------------------------------------------------------------------
     def __GetDongle(self):
+  
+        
         self.Message            = ''
         self.Cycplus            = False
         self.DongleReconnected  = False
@@ -418,6 +424,8 @@ class clsAntDongle():
     #-----------------------------------------------------------------------
     def Write(self, messages, receive=True, drop=True):
         rtn = []
+        if self.simulate:
+            return rtn
         for message in messages:
             #-------------------------------------------------------------------
             # Logging
@@ -526,6 +534,8 @@ class clsAntDongle():
         # https://www.thisisant.com/forum/view/viewthread/812
         #-------------------------------------------------------------------
         data = []
+        if self.simulate:
+            return data
         while True:
             trv = self.__ReadAndRetry()
             if len(trv) == 0:
@@ -599,6 +609,9 @@ class clsAntDongle():
     #   hrm:     D00000693_-_ANT+_Device_Profile_-_Heart_Rate_Rev_2.1.pdf
     #---------------------------------------------------------------------------
     def Calibrate(self):
+        if self.simulate:
+            return
+
         if debug.on(debug.Data1): logfile.Write ("Calibrate()")
 
         self.ResetDongle()
@@ -613,6 +626,9 @@ class clsAntDongle():
         self.Write(messages)
 
     def ResetDongle(self):
+        if self.simulate:
+            return
+
         if self.Cycplus:
             # For CYCPLUS dongles this command may be given on initialization only
             # If done lateron, the dongle hangs
@@ -629,6 +645,8 @@ class clsAntDongle():
     def SlavePair_ChannelConfig(self, channel_pair, \
                                 DeviceNumber=0, DeviceTypeID=0, TransmissionType=0):
                                 # Slave, by default full wildcards ChannelID, see msg51 comment
+        if self.simulate:
+            return
         if DeviceNumber > 0: s = ", id=%s only" % DeviceNumber
         else:                s = ", any device"
         logfile.Console ('FortiusANT tries to pair with an ANT+ device' + s)
@@ -644,6 +662,8 @@ class clsAntDongle():
         self.Write(messages, True, False)
 
     def Trainer_ChannelConfig(self):
+        if self.simulate:
+            return
         logfile.Console ('FortiusANT broadcasts data as an ANT+ Controlled Fitness Equipent device (FE-C), id=%s' % DeviceNumber_FE)
         if debug.on(debug.Data1): logfile.Write ("Trainer_ChannelConfig()")
         messages=[
@@ -657,6 +677,8 @@ class clsAntDongle():
         self.Write(messages)
 
     def SlaveTrainer_ChannelConfig(self, DeviceNumber):
+        if self.simulate:
+            return
         if DeviceNumber > 0: s = ", id=%s only" % DeviceNumber
         else:                s = ", any device"
         logfile.Console ('FortiusANT receives data from an ANT+ Controlled Fitness Equipent device (FE-C)' + s)
@@ -673,6 +695,8 @@ class clsAntDongle():
         self.Write(messages)
 
     def HRM_ChannelConfig(self):
+        if self.simulate:
+            return
         logfile.Console ('FortiusANT broadcasts data as an ANT+ Heart Rate Monitor (HRM), id=%s' % DeviceNumber_HRM)
         if debug.on(debug.Data1): logfile.Write ("HRM_ChannelConfig()")
         messages=[
@@ -686,6 +710,8 @@ class clsAntDongle():
         self.Write(messages)
 
     def SlaveHRM_ChannelConfig(self, DeviceNumber):
+        if self.simulate:
+            return
         if DeviceNumber > 0: s = ", id=%s only" % DeviceNumber
         else:                s = ", any device"
         logfile.Console ('FortiusANT receives data from an ANT+ Heart Rate Monitor (HRM display)' + s)
@@ -702,6 +728,8 @@ class clsAntDongle():
         self.Write(messages)
 
     def PWR_ChannelConfig(self, DeviceNumber):
+        if self.simulate:
+            return
         logfile.Console ('FortiusANT broadcasts data as an ANT+ Bicycle Power Sensor (PWR), id=%s' % DeviceNumber_PWR)
         if debug.on(debug.Data1): logfile.Write ("PWR_ChannelConfig()")
         messages=[
@@ -715,6 +743,8 @@ class clsAntDongle():
         self.Write(messages)
 
     def SCS_ChannelConfig(self, DeviceNumber):
+        if self.simulate:
+            return
         logfile.Console ('FortiusANT broadcasts data as an ANT+ Speed and Cadence Sensor (SCS), id=%s' % DeviceNumber_SCS)
         if debug.on(debug.Data1): logfile.Write ("SCS_ChannelConfig()")
         messages=[
@@ -728,6 +758,8 @@ class clsAntDongle():
         self.Write(messages)
 
     def SlaveSCS_ChannelConfig(self, DeviceNumber):
+        if self.simulate:
+            return
         if DeviceNumber > 0: s = ", id=%s only" % DeviceNumber
         else:                s = ", any device"
         logfile.Console ('FortiusANT receives data from an ANT+ Speed and Cadence Sensor (SCS Display)' + s)
@@ -744,6 +776,8 @@ class clsAntDongle():
         self.Write(messages)
 
     def VTX_ChannelConfig(self):                         # Pretend to be a Tacx i-Vortex
+        if self.simulate:
+            return
         logfile.Console ('FortiusANT broadcasts data as an ANT+ Tacx i-Vortex (VTX), id=%s' % DeviceNumber_VTX)
         if debug.on(debug.Data1): logfile.Write ("VTX_ChannelConfig()")
         messages=[
@@ -758,6 +792,8 @@ class clsAntDongle():
         self.Write(messages)
 
     def SlaveVTX_ChannelConfig(self, DeviceNumber):     # Listen to a Tacx i-Vortex
+        if self.simulate:
+            return
         if DeviceNumber > 0: s = ", id=%s only" % DeviceNumber
         else:                s = ", any device"
         logfile.Console ('FortiusANT receives data from an ANT+ Tacx i-Vortex (VTX Controller)' + s)
@@ -775,7 +811,8 @@ class clsAntDongle():
 
     def SlaveVHU_ChannelConfig(self, DeviceNumber):     # Listen to a Tacx i-Vortex Headunit
                                                         # See comment above msgPage000_TacxVortexHU_StayAlive
-        
+        if self.simulate:
+            return
         if DeviceNumber > 0: s = ", id=%s only" % DeviceNumber
         else:                s = ", any device"
         logfile.Console ('FortiusANT receives data from an ANT+ Tacx i-Vortex Headunit (VHU Controller)' + s)
@@ -792,6 +829,8 @@ class clsAntDongle():
         self.Write(messages)
 
     def PowerDisplay_unused(self):
+        if self.simulate:
+            return
         if debug.on(debug.Data1): logfile.Write ("powerdisplay()")
                                                             # calibrate as power display
         messages=[
