@@ -241,7 +241,7 @@ def LocateHW(self):
     if AntDongle and AntDongle.OK:
         pass
     else:
-        AntDongle = ant.clsAntDongle(None,clv.simulate)
+        AntDongle = ant.clsAntDongle(None,clv.SimulateAnt)
         if AntDongle.OK:
              if clv.manual:      AntDongle.Message += ' (manual power)'
              if clv.manualGrade: AntDongle.Message += ' (manual grade)'

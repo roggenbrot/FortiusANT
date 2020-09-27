@@ -100,7 +100,7 @@ class CommandLineVariables(object):
         parser.add_argument('-s','--simulate',  help='Simulated trainer to test ANT+ connectivity',         required=False, action='store_true')
 #scs    parser.add_argument('-S','--scs',       help='Pair this Speed Cadence Sensor (0: default device)',  required=False, default=False)
         parser.add_argument('-t','--TacxType',  help='Specify Tacx Type; e.g. i-Vortex, default=autodetect',required=False, default=False)
-        parser.add_argument('-S','--simulateAnt',  help='Simulated ANT+ connectivity to test trainer',required=False, default=False)
+        parser.add_argument('-S','--simulateAnt',  help='Simulated ANT+ connectivity to test trainer',required=False, action='store_true')
 
         #-----------------------------------------------------------------------
         # Deprecated
@@ -123,7 +123,7 @@ class CommandLineVariables(object):
         self.gui                    = args.gui
         self.manual                 = args.manual
         self.manualGrade            = args.manualGrade
-        self.noAntDongle            = args.noAntDongle
+        self.SimulateAnt            = args.simulateAnt
         self.calibrate              = args.calibrate
         self.PowerMode              = args.PowerMode
         self.PedalStrokeAnalysis    = args.PedalStrokeAnalysis
@@ -141,7 +141,7 @@ class CommandLineVariables(object):
             logfile.Console("-m/-M and -s both specified, most likely for program test purpose")
 
         if (self.manual or self.manualGrade) and self.SimulateAnt:
-            logfile.Console("-m/-M and -sa both specified, most likely for trainer test purpose")
+            logfile.Console("-m/-M and -S both specified, most likely for trainer test purpose")
 
         #-----------------------------------------------------------------------
         # Bicycle definition to be parsed; three parameters
